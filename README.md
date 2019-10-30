@@ -24,8 +24,8 @@ All Methode Return Json Objects
          "device_model":"<device-model>",
          "device_name":"<device-name>",
          "hw_ver":"<frimware version>",
-         "online": <devices- online state as boolean>,
-         "gen":<generation>,
+         "online": "<devices- online state as boolean>",
+         "gen":"<generation as int>",
          "hw_features":[
 
          ]
