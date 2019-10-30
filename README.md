@@ -5,7 +5,7 @@ Unofficial MyDlink API to give you access to Mydlink Cloud Devices example: D-Li
 
 ## Quickstart
  * **[Installation](#installation)**
- * **[Example](#example)**
+ * **[Example-Code](#example-code)**
 
 ## Installation
 
@@ -14,8 +14,29 @@ Install using setup.py to pull all Python dependencies, or pip:
 ```
 pip install git+https://github.com/ageof/MyDlink-API-Python.git
 ```
+## Methoden
+All Methode Return Json Objects
+### get_device_list 
+```json
+      {
+         "mac":"<DEVICE-MAC>",
+         "mydlink_id":"<your_dlink_id>",
+         "device_model":"<device-model>",
+         "device_name":"<device-name>",
+         "hw_ver":"<frimware version>",
+         "online":>´<devices- online state>,
+         "gen":<generation>,
+         "hw_features":[
 
-## Example
+         ]
+      }
+
+```
+
+ 
+
+
+## Example-Code
 ```python
 import argparse
 import mydlink_api
