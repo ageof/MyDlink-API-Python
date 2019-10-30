@@ -26,9 +26,7 @@ All Methode Return Json Objects
          "hw_ver":"<frimware version>",
          "online": "<devices- online state as boolean>",
          "gen":"<generation as int>",
-         "hw_features":[
-
-         ]
+         "hw_features":[ ]
       }
 
 ```
