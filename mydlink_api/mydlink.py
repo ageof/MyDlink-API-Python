@@ -57,7 +57,7 @@ class MyDlink:
         )
         response = self.url_utils.get_request(url=device_list_url, type=self.url_utils.TYPE_GET)
         device_list_json = Url.parse(response.content.decode('utf8'))
-        return device_list_json['data'][0]
+        return device_list_json['data']
 
     def get_device_details(self, mydlink_id: str, mac: str) -> json:
         device_detail_url = "https://{openapi}/me/device/info?access_token={access_token}".format(
