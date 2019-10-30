@@ -16,7 +16,7 @@ pip install git+https://github.com/ageof/MyDlink-API-Python.git
 ```
 ## Methoden
 All Methode Return Json Objects
-### get_device_list 
+### get_device_list return a Array of your Cloud Devices
 ```json
       {
          "mac":"<DEVICE-MAC>",
@@ -53,8 +53,8 @@ if __name__ == "__main__":
     mydlink = mydlink_api.MyDlink(password=args.password, email=args.email, proxy=args.proxy)
     
     device_list_json = mydlink.get_device_list()
-    device_info_json = mydlink.get_device_details(mac=device_list_json['mac'],
-                                                  mydlink_id=device_list_json['mydlink_id'])
+    device_info_json = mydlink.get_device_details(mac=device_list_json[0]['mac'],
+                                                  mydlink_id=device_list_json[0]['mydlink_id'])
 
     mydlink.get_mydlink_cloud_recordings(year=2019, month=10, day=9)
 ```
