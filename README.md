@@ -11,5 +11,5 @@ Unofficial MyDlink API to give you access to Mydlink Cloud Devices example: D-Li
 Install using setup.py to pull all Python dependencies, or pip:
 
 ```
-pip install 
+pip install git+https://github.com/ageof/MyDlink-API-Python.git
 ```
