@@ -6,6 +6,7 @@ Unofficial MyDlink API to give you access to Mydlink Cloud Devices example: D-Li
 ## Quickstart
  * **[Installation](#installation)**
  * **[Example-Code](#example-code)**
+ * **[Methoden](#methoden)**
 
 ## Installation
 
