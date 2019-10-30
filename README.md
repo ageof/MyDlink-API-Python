@@ -42,24 +42,23 @@ The Return Json is a Detail List with all informaion about the selected Device.
       "mydlink_id":"",
       "device_model":"",
       "device_name":"",
-      "verified":true,
+      "verified":false,
       "password":"",
       "public_ip":"0.0.0.0",
       "public_port":"0",
-      "private_ip":"192.XX.XX.XX",
+      "private_ip":"192.XXX.XXX.XXX",
       "private_port":"8080",
       "auth_key":"XXXXXXXXXXXXX",
-      "signal_addr":"mydlink_url_xxxxx",
+      "signal_addr":"mydlink_url",
       "online":true,
       "fw_uptodate":false,
       "fw_force":false,
       "fw_manual":false,
-      "fw_ver":"2.01.03",
-      "agent_ver":"3.0.0-b71",
+      "fw_ver":"2.01.XX",
+      "agent_ver":"3.0.0-XX",
       "features":[
          2,
-         9,
-
+         9
       ],
       "ctrl_stats":"",
       "module_info":"",
@@ -71,14 +70,13 @@ The Return Json is a Detail List with all informaion about the selected Device.
             "uid":0,
             "model":"",
             "setting":[
-               21,
-
+               21
             ],
             "status":[
                5,
                8
             ],
-            "version":"2.01.03"
+            "version":"2.01.XX"
          }
       ],
       "pin_code":"bluetooth pin",
@@ -90,11 +88,11 @@ The Return Json is a Detail List with all informaion about the selected Device.
       "olson_tz":"",
       "DCD":"wss:\/\/xxxx.mydlink.com:xxx\/SwitchCamera",
       "device_token":"xxxx",
-      "da_url":"wss:\/\/192.XxX.XxX.XXX:8080\/SwitchCamera",
+      "da_url":"wss:\/\/192.XXX.XXX.XXX:8080\/SwitchCamera",
       "login_time":"",
       "local_liveview":"http:\/\/192.XXX.XXX.XXX:8088\/live.m3u8",
-      "fw_latest":"2.02.02",
-      "agent_latest":"3.1.0-b03",
+      "fw_latest":"2.02.XX",
+      "agent_latest":"3.1.0-XX",
       "fw_latest_size":0
    }
 ]
