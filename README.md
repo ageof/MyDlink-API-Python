@@ -103,7 +103,7 @@ The Return Json is a Detail List with all informaion about the selected Device.
 ## Example-Code
 ```python
 import argparse
-import mydlink_api
+from  mydlink_api import mydlink as cloud
 
 
 if __name__ == "__main__":
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     parser.add_argument('-pr', '--proxy', dest='proxy', help='Porxy Url with or without credational')
     args = parser.parse_args()
 
-    mydlink = mydlink_api.MyDlink(password=args.password, email=args.email, proxy=args.proxy)
+    mydlink = cloud.MyDlink(password=args.password, email=args.email, proxy=args.proxy)
     
     device_list_json = mydlink.get_device_list()
     device_info_json = mydlink.get_device_details(mac=device_list_json[0]['mac'],
