@@ -108,7 +108,7 @@ The Return Json is a List off all Cloud Events from your devices in this time ra
 ```json
       data{
             [
-                  {"start_ts":timestamp,
+                  {"start_ts":"timestmap as long",
                   "mydlink_no":"your_mydlink"
                   },
             ]
