@@ -22,6 +22,6 @@ setuptools.setup(name='mydlink_api',
                  url='https://github.com/ageof/MyDlink-API-Python',
                  author=pkg_vars['__author__'],
                  author_email=pkg_vars['__email__'],
-                 packages=['mydlink_api'],
+                 packages=['mydlink_api','mydlink_api.utils'],
                  install_requires=reqs,
                  zip_safe=False)
