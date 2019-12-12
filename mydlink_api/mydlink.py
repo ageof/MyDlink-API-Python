@@ -3,8 +3,8 @@ import json
 import time
 import urllib.parse
 
-from .utils.hashing import Hashing
-from .utils.url import Url
+from mydlink_api.utils.hashing import Hashing
+from mydlink_api.utils.url import Url
 
 
 class MyDlink:
