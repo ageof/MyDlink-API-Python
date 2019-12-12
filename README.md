@@ -103,11 +103,12 @@ This function need a start and end timestamp like:
       recording_date_start = datetime.datetime(year, month, day, 2, 00, 00)
       recording_date_end = datetime.datetime(year, month, day, 23, 59, 59, 999999)
 The Return Json is a List off all Cloud Events from your devices in this time range.
-```
 ```json
       data:[
-                  {"start_ts":"timestmap as long",
-                  "mydlink_no":"your_mydlink"
+                  {
+                  "start_ts":"timestmap as long",
+                  "mydlink_no":"your_mydlink",
+                  "path":"Amazon Web Services AWS URL"
                   },
             ]
       
