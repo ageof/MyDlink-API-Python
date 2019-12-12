@@ -115,7 +115,7 @@ The Return Json is a List off all Cloud Events from your devices in this time ra
 
 ```
 
-
+#### get_mydlink_cloud_recordings
 
 ## Example-Code
 ```python
