@@ -21,9 +21,9 @@ class Url:
         response = None
         try:
             if type is self.TYPE_POST:
-                response = requests.post(url, headers=self.headers_post, proxies=self.proxies, json=input_json)
+                response = requests.post(url, headers=self.headers_post, proxies=self.proxies, json=input_json,verify=False)
             elif type is self.TYPE_GET:
-                response = requests.get(url, headers=self.headers_get, proxies=self.proxies)
+                response = requests.get(url, headers=self.headers_get, proxies=self.proxies,verify=False)
         except Exception as e:
             print(str(e))
         return response
