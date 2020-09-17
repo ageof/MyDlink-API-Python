@@ -10,9 +10,8 @@ class Url:
         self.TYPE_POST = 'post'
         self.TYPE_GET = 'get'
         self.proxies = None
-        self.headers_get = {'User-Agent': 'Mozilla/5.0', 'connection': 'Keep-Alive', 'accept': '*/*', }
-        self.headers_post = {'User-Agent': 'Mozilla/5.0', 'connection': 'Keep-Alive', 'accept': '*/*',
-                             'Content-Type': 'application/json'}
+        self.headers_get = {'User-Agent': 'Mozilla/5.0', 'connection': 'Keep-Alive', 'accept': '*/*', 'x-md-lang': 'de','x-md-app-ver': '02.00.01.75','x-md-os-type': 'android','x-md-os-version': '7.0'}
+        self.headers_post = {'User-Agent': 'Mozilla/5.0', 'connection': 'Keep-Alive', 'accept': '*/*','Content-Type': 'application/json','x-md-lang': 'de','x-md-app-ver': '02.00.01.75','x-md-os-type': 'android','x-md-os-version': '7.0'}
         if proxy is not None:
             self.proxies = {'http': '{proxy}'.format(proxy=proxy),
                             'https': '{proxy}'.format(proxy=proxy)
