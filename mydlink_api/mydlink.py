@@ -21,7 +21,7 @@ class MyDlink:
         self.__login()
 
     def __login(self):
-        oauth_sub_url = "/oauth/authorize"
+        oauth_sub_url = "/oauth/authorize2"
         login_url = "{oauth_sub_url}?" \
                     "client_id={client_id}" \
                     "&redirect_uri={redirect_url_b64_encode}" \
@@ -47,7 +47,7 @@ class MyDlink:
             signatur=signatur
         )
 
-        response = self.url_utils.get_request(request_url)
+        response = self.url_utils.get_request(request_url,type=self.url_utils.TYPE_GET)
         self.login_params = Url.get_params(response)
 
     def get_device_list(self) -> json:
