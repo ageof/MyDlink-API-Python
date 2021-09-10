@@ -116,28 +116,44 @@ The Return Json is a List off all Cloud Events from your devices in this time ra
 ```
 
 #### get_mydlink_cloud_recordings
+Dosen't work at the momement, coming sone 
+
+### get_mydlink_cloud_img from event
+This function need the timestamp and mydlink_id from the event, for this inforamtion use: get_event_list_meta_infos
+mydlink_id=device_list_json[0]['mydlink_id']
+event_timestamp=event['timestamp'])
+The Return is a String with the url to the img witch is save in the aws from mydlink
 
 ## Example-Code
 ```python
 import argparse
-from  mydlink_api import mydlink as cloud
 
+from mydlink_api.mydlink import MyDlink
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="API to Connect MyDlink Cloud Devices")
-    parser.add_argument('-e', '--email', dest='email', help='MyDlink email example maxmuster@muster.com')
-    parser.add_argument('-p', '--password', dest='password', help='MyDlink password example Start123')
-    parser.add_argument('-pr', '--proxy', dest='proxy', help='Porxy Url with or without credational')
-    args = parser.parse_args()
+      parser = argparse.ArgumentParser(
+            description="API to Connect MyDlink Cloud Devices")
+      parser.add_argument('-e', '--email', dest='email', help='MyDlink email example maxmuster@muster.com')
+      parser.add_argument('-p', '--password', dest='password', help='MyDlink password example Start123')
+      parser.add_argument('-pr', '--proxy', dest='proxy', help='Porxy Url with or without credational')
+      args = parser.parse_args()
 
-    mydlink = cloud.MyDlink(password=args.password, email=args.email, proxy=args.proxy)
-    
-    device_list_json = mydlink.get_device_list()
-    device_info_json = mydlink.get_device_details(mac=device_list_json[0]['mac'],
-                                                  mydlink_id=device_list_json[0]['mydlink_id'])
+      mydlink = MyDlink(password=args.password, email=args.email, proxy=args.proxy)
 
-    mydlink.get_mydlink_cloud_recordings(year=2019, month=10, day=9)
+      device_list_json = mydlink.get_device_list()
+      device_info_json = mydlink.get_device_details(mac=device_list_json[0]['mac'],
+                                                    mydlink_id=device_list_json[0]['mydlink_id'])
+
+      date_list = [2021, 9, 8]
+      events_list = mydlink.get_event_list_meta_infos(year=date_list[0], month=date_list[1], day=date_list[2])
+
+      #This function dosent work at the moment, coming sone
+      #mydlink.get_mydlink_cloud_recordings(year=date_list[0], month=date_list[1], day=date_list[2])
+
+      cloud_img_list = []
+      for event in events_list['data'][0]['data']:
+            cloud_img_list.append(mydlink.get_mydlink_cloud_img(mydlink_id=device_list_json[0]['mydlink_id'],
+                                                                event_timestamp=event['timestamp']))
 ```
 
 # License:

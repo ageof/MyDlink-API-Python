@@ -9,6 +9,7 @@ class Url:
     def __init__(self, proxy: str):
         self.TYPE_POST = 'post'
         self.TYPE_GET = 'get'
+        self.STATUS_CODE_SUCCESS = 200
         self.proxies = None
         self.headers_get = {'User-Agent': 'Mozilla/5.0', 'connection': 'Keep-Alive', 'accept': '*/*', 'x-md-lang': 'de','x-md-app-ver': '02.00.01.75','x-md-os-type': 'android','x-md-os-version': '7.0'}
         self.headers_post = {'User-Agent': 'Mozilla/5.0', 'connection': 'Keep-Alive', 'accept': '*/*','Content-Type': 'application/json','x-md-lang': 'de','x-md-app-ver': '02.00.01.75','x-md-os-type': 'android','x-md-os-version': '7.0'}

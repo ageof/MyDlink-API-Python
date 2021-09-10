@@ -47,7 +47,7 @@ class MyDlink:
             signatur=signatur
         )
 
-        response = self.url_utils.get_request(request_url,type=self.url_utils.TYPE_GET)
+        response = self.url_utils.get_request(request_url, type=self.url_utils.TYPE_GET)
         self.login_params = Url.get_params(response)
 
     def get_device_list(self) -> json:
@@ -81,13 +81,7 @@ class MyDlink:
         return device_detail_json['data'][0]
 
     def get_mydlink_cloud_recordings(self, year: int, month: int, day: int):
-        recording_date_start = datetime.datetime(year, month, day, 2, 00, 00)
-        recording_date_end = datetime.datetime(year, month, day, 23, 59, 59, 999999)
-
-        recording_timestampe_start = str(recording_date_start.timestamp()).replace(".", "") + "00"
-        recording_timestampe_end = str(recording_date_end.timestamp()).replace(".", "")[0:13]
-
-        event_list_meta_json = self.get_event_list_meta_infos(recording_timestampe_end, recording_timestampe_start)
+        event_list_meta_json = self.get_event_list_meta_infos(year, month, day)
         if 'path' in event_list_meta_json['data'][0]:
             response_all_events_details = self.url_utils.get_request(url=event_list_meta_json['data'][0]['path'],
                                                                      type=self.url_utils.TYPE_GET)
@@ -97,11 +91,17 @@ class MyDlink:
             all_events_details_json = event_list_meta_json['data'][0]['data']
         self.__get_mydlink_cloud_recordings_file(all_events_details_json)
 
-    def get_event_list_meta_infos(self, recording_timestampe_end: int, recording_timestampe_start: int) -> json:
+    def get_event_list_meta_infos(self, year: int, month: int, day: int) -> json:
         device_detail_url = "https://{openapi}/me/nvr/event/list?access_token={access_token}".format(
             openapi=self.login_params.get('api_site')[0],
             access_token=self.login_params.get('access_token')[0]
         )
+
+        recording_date_start = datetime.datetime(year, month, day, 2, 00, 00)
+        recording_date_end = datetime.datetime(year, month, day, 23, 59, 59, 999999)
+
+        recording_timestampe_start = str(recording_date_start.timestamp()).replace(".", "") + "00"
+        recording_timestampe_end = str(recording_date_end.timestamp()).replace(".", "")[0:13]
 
         json_object = {}
         json_object['end_ts'] = int(recording_timestampe_end)
@@ -146,3 +146,26 @@ class MyDlink:
             response = self.url_utils.get_request(url=cloud_video_url, type=self.url_utils.TYPE_GET)
             recordings_file.append(response)
         return recordings_file
+
+    def get_mydlink_cloud_img(self, mydlink_id: str, event_timestamp: int) -> str:
+        imagepath = None
+        json_object = {}
+        json_object['mydlink_id'] = mydlink_id
+        json_object['timestamp'] = event_timestamp
+
+        json_object_final = {}
+        json_object_final['data'] = json_object
+
+        storyboard_img_url = "https://{openapi}/me/nvr/storyboard/info?access_token={access_token}".format(
+            openapi=self.login_params.get('api_site')[0],
+            access_token=self.login_params.get('access_token')[0]
+        )
+
+        response = self.url_utils.get_request(url=storyboard_img_url, type=self.url_utils.TYPE_POST,
+                                              input_json=json_object_final)
+
+        if response.status_code == self.url_utils.STATUS_CODE_SUCCESS:
+            response_content = Url.parse(response.content.decode('utf8'))
+            imagepath = response_content['data']['list'][0]['path']
+
+        return imagepath
