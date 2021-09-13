@@ -13,11 +13,11 @@ class MyDlink:
     android_id = "bd36a6c011f1287e"
     oauth_secret = "5259311fa8cab90f09f2dc1e09d2d8ee"
 
-    def __init__(self, email: str, password: str, proxy=None):
+    def __init__(self, email: str, password: str, proxy=None, disable_unverified_https_warn: bool = True):
         self.name = "PythonApi"
         self.email = email
         self.password = Hashing.md5Hashing(password)
-        self.url_utils = Url(proxy)
+        self.url_utils = Url(proxy=proxy, disable_unverified_https_warn=disable_unverified_https_warn)
         self.__login()
 
     def __login(self):
@@ -47,7 +47,7 @@ class MyDlink:
             signatur=signatur
         )
 
-        response = self.url_utils.get_request(request_url, type=self.url_utils.TYPE_GET)
+        response = self.url_utils.get_request(request_url, request_type=self.url_utils.TYPE_GET)
         self.login_params = Url.get_params(response)
 
     def get_device_list(self) -> json:
@@ -55,7 +55,7 @@ class MyDlink:
             openapi=self.login_params.get('api_site')[0],
             access_token=self.login_params.get('access_token')[0]
         )
-        response = self.url_utils.get_request(url=device_list_url, type=self.url_utils.TYPE_GET)
+        response = self.url_utils.get_request(url=device_list_url, request_type=self.url_utils.TYPE_GET)
         device_list_json = Url.parse(response.content.decode('utf8'))
         return device_list_json['data']
 
@@ -64,32 +64,26 @@ class MyDlink:
             openapi=self.login_params.get('api_site')[0],
             access_token=self.login_params.get('access_token')[0]
         )
-        json_object = {}
-        json_object['mac'] = mac
-        json_object['mydlink_id'] = mydlink_id
+        json_object = {'mac': mac, 'mydlink_id': mydlink_id}
+        json_object_list = [json_object]
+        json_object_final = {'data': json_object_list}
 
-        json_object_list = []
-        json_object_list.append(json_object)
-
-        json_object_final = {}
-        json_object_final['data'] = json_object_list
-
-        response = self.url_utils.get_request(url=device_detail_url, type=self.url_utils.TYPE_POST,
+        response = self.url_utils.get_request(url=device_detail_url, request_type=self.url_utils.TYPE_POST,
                                               input_json=json_object_final)
 
         device_detail_json = Url.parse(response.content.decode('utf8'))
         return device_detail_json['data'][0]
 
-    def get_mydlink_cloud_recordings(self, year: int, month: int, day: int):
+    def get_mydlink_cloud_recordings_urls(self, year: int, month: int, day: int) -> []:
         event_list_meta_json = self.get_event_list_meta_infos(year, month, day)
         if 'path' in event_list_meta_json['data'][0]:
             response_all_events_details = self.url_utils.get_request(url=event_list_meta_json['data'][0]['path'],
-                                                                     type=self.url_utils.TYPE_GET)
+                                                                     request_type=self.url_utils.TYPE_GET)
             all_events_details_json = Url.parse(response_all_events_details.content.decode('utf8'))
             all_events_details_json = all_events_details_json['data'][0]['data']
         else:
             all_events_details_json = event_list_meta_json['data'][0]['data']
-        self.__get_mydlink_cloud_recordings_file(all_events_details_json)
+        return self.__get_mydlink_cloud_recordings_file(all_events_details_json)
 
     def get_event_list_meta_infos(self, year: int, month: int, day: int) -> json:
         device_detail_url = "https://{openapi}/me/nvr/event/list?access_token={access_token}".format(
@@ -103,65 +97,56 @@ class MyDlink:
         recording_timestampe_start = str(recording_date_start.timestamp()).replace(".", "") + "00"
         recording_timestampe_end = str(recording_date_end.timestamp()).replace(".", "")[0:13]
 
-        json_object = {}
-        json_object['end_ts'] = int(recording_timestampe_end)
-        json_object['start_ts'] = int(recording_timestampe_start)
+        json_object = {'end_ts': int(recording_timestampe_end), 'start_ts': int(recording_timestampe_start)}
+        json_object_final = {'data': json_object}
 
-        json_object_final = {}
-        json_object_final['data'] = json_object
-
-        response = self.url_utils.get_request(url=device_detail_url, type=self.url_utils.TYPE_POST,
+        response = self.url_utils.get_request(url=device_detail_url, request_type=self.url_utils.TYPE_POST,
                                               input_json=json_object_final)
         event_list_meta_json = Url.parse(response.content.decode('utf8'))
         return event_list_meta_json
 
-    def __get_mydlink_cloud_recordings_file(self, datas: json):
+    def __get_mydlink_cloud_recordings_file(self, datas: json) -> []:
         list_initiate_url = "https://{openapi}/me/nvr/list/initiate?access_token={access_token}".format(
             openapi=self.login_params.get('api_site')[0],
             access_token=self.login_params.get('access_token')[0]
         )
 
-        recordings_file = []
-        counter = 1
-        for data in datas:
-            json_object = {}
-            json_object['favorite'] = False
-            json_object['timestamp'] = data['timestamp']
-            json_object['subs_uid'] = data['act'][0]['subs_uid']
-            json_object['mydlink_id'] = data['mydlink_id']
+        data = datas[0]
+        json_object = {'favorite': False, 'timestamp': data['timestamp'], 'subs_uid': data['act'][0]['subs_uid'],
+                       'mydlink_id': data['mydlink_id']}
 
-            json_object_final = {}
-            json_object_final['data'] = json_object
-            print("Request " + str(counter) + " von " + str(len(datas)))
-            response_list_initiate = self.url_utils.get_request(url=list_initiate_url, type=self.url_utils.TYPE_POST,
-                                                                input_json=json_object_final)
+        json_object_final = {'data': json_object}
+        response_list_initiate = self.url_utils.get_request(url=list_initiate_url,
+                                                            request_type=self.url_utils.TYPE_POST,
+                                                            input_json=json_object_final)
 
-            response_list_initiate_json = Url.parse(response_list_initiate.content.decode('utf8'))
+        response_list_initiate_json = Url.parse(response_list_initiate.content.decode('utf8'))
 
-            cloud_video_url = "https://{openapi}/me/nvr/list/video.m3u8?session={session}&model=1".format(
-                openapi=self.login_params.get('api_site')[0],
-                session=response_list_initiate_json['data']['session_id']
-            )
+        cloud_video_url = "https://{openapi}/me/nvr/list/video.m3u8?session={session}&model=1".format(
+            openapi=self.login_params.get('api_site')[0],
+            session=response_list_initiate_json['data']['session_id']
+        )
+        aws_recording_data = self.url_utils.stream_file(cloud_video_url).decode("utf-8").splitlines()
 
-            response = self.url_utils.get_request(url=cloud_video_url, type=self.url_utils.TYPE_GET)
-            recordings_file.append(response)
-        return recordings_file
+        def check_list(aws_recording_data):
+            if 'https' in aws_recording_data:
+                return True
+            return False
 
-    def get_mydlink_cloud_img(self, mydlink_id: str, event_timestamp: int) -> str:
+        return list(filter(check_list, aws_recording_data))
+
+    def get_mydlink_cloud_img_url(self, mydlink_id: str, event_timestamp: int) -> str:
         imagepath = None
-        json_object = {}
-        json_object['mydlink_id'] = mydlink_id
-        json_object['timestamp'] = event_timestamp
 
-        json_object_final = {}
-        json_object_final['data'] = json_object
+        json_object = {'mydlink_id': mydlink_id, 'timestamp': event_timestamp}
+        json_object_final = {'data': json_object}
 
         storyboard_img_url = "https://{openapi}/me/nvr/storyboard/info?access_token={access_token}".format(
             openapi=self.login_params.get('api_site')[0],
             access_token=self.login_params.get('access_token')[0]
         )
 
-        response = self.url_utils.get_request(url=storyboard_img_url, type=self.url_utils.TYPE_POST,
+        response = self.url_utils.get_request(url=storyboard_img_url, request_type=self.url_utils.TYPE_POST,
                                               input_json=json_object_final)
 
         if response.status_code == self.url_utils.STATUS_CODE_SUCCESS:
