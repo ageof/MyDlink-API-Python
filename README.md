@@ -163,7 +163,7 @@ if __name__ == "__main__":
             cloud_img_list.append(mydlink.get_mydlink_cloud_img_url(mydlink_id=device_list_json[0]['mydlink_id'],
                                                                     event_timestamp=event['timestamp']))
     else:
-        logging.info('Now Events and Images avilibale')
+        logging.info('Now Events and Images available')
 ```
 
 # License:
